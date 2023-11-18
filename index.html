@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+      }
+      #colors,
+      #colors_code {
+        width: 400px;
+        min-height: 600px;
+        height: auto;
+        background-color: rgb(255, 255, 255);
+        border: 1px solid #000;
+        margin: 0 auto;
+      }
+      #colors {
+        max-height: 600px;
+      }
+      .colors_container {
+        width: 100%;
+        height: 10%;
+        display: flex;
+        flex-direction: row;
+      }
+      .each_color {
+        width: 50%;
+        height: 100%;
+        cursor: pointer;
+      }
+      .color_name {
+        cursor: pointer;
+        width: 40%;
+        height: 100%;
+        padding: 20px;
+      }
+
+      .array-line {
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="colors"></div>
+    <div id="colors_code"></div>
+  </body>
+
+  <script>
+    const updatedArray = [
+      [],
+      ["orange", "blue", "pink"],
+      ["orange", "blue"],
+      ["orange", "blue", "black"],
+    ];
+    const colors = [
+      "red",
+      "orange",
+      "brown",
+      "white",
+      "green",
+      "cyan",
+      "yellow",
+      "blue",
+      "black",
+      "pink",
+    ];
+
+    const json_array = document.getElementById("colors_code");
+    json_array.innerText = JSON.stringify(updatedArray);
+    function displayArraysInParagraphs(arrayOfArrays) {
+      json_array.innerText = JSON.stringify(arrayOfArrays);
+    }
+
+    displayArraysInParagraphs(updatedArray);
+
+    const colorsFunc = (colorName) => {
+      const resultArray = updatedArray.find(
+        (currentArray, index) =>
+          index !== 0 && !currentArray.includes(colorName)
+      );
+      const findIndex = updatedArray.findIndex(
+        (currentArray, index) =>
+          index !== 0 && !currentArray.includes(colorName)
+      );
+      if (resultArray) {
+        resultArray.push(colorName);
+        const sortedArray = resultArray.sort((a, b) => {
+          const indexOfA = colors.indexOf(a);
+          const indexOfB = colors.indexOf(b);
+          return indexOfA - indexOfB;
+        });
+        updatedArray[findIndex] = sortedArray;
+      } else {
+        const newArray = [colorName];
+        updatedArray.push(newArray);
+      }
+
+      displayArraysInParagraphs(updatedArray);
+    };
+
+    const colorsId = document.getElementById("colors");
+
+    colors.forEach((color) => {
+      const containerColor = document.createElement("div");
+      containerColor.onclick = () => {
+        colorsFunc(color);
+      };
+      containerColor.className = "colors_container";
+      const divColor = document.createElement("div");
+      divColor.className = "each_color";
+      divColor.style.backgroundColor = color;
+      const colorName = document.createElement("p");
+      colorName.innerText = color;
+      colorName.className = "color_name";
+      containerColor.appendChild(colorName);
+      containerColor.appendChild(divColor);
+      colorsId.appendChild(containerColor);
+    });
+  </script>
+</html>
